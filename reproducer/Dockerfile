@@ -14,6 +14,8 @@ RUN git -C php-src checkout HEAD~1
 # build php-fpm
 RUN cd php-src && ./buildconf --force && ./configure --enable-fpm --without-pear && make -j4 && make install
 
+RUN apt-get -y install nano vim psmisc htop
+
 COPY php-fpm.conf /usr/local/etc/
 COPY nginx.server.conf /etc/nginx/sites-enabled/default
 COPY script.php /var/www/html/script.php
