@@ -1,10 +1,11 @@
 
-
 # Slides
 
 Começar pelo slide 6 (explicar NGINX, CGI, FastCGI, php-FPM)
 
-Explicas buffer underflow
+Voltar pro slide 3 e explicar o que é PATH_INFO
+
+Explicar oq é buffer underflow?
 
 # DEMO
 Executar antes pq demora 3 dias pra buildar:
@@ -15,7 +16,7 @@ docker build -t reproduce-cve-2019-11043 .
 
 ------------------------------------------------------------
 
-docker run --rm --name cve-mac0352 -ti -p 1213:80 reproduce-cve-2019-11043
+docker run --rm --name cve-mac0352 -ti -p 8080:80 reproduce-cve-2019-11043
 
 docker run --link cve-mac0352 --rm ypereirareis/cve-2019-11043 http://cve-mac0352:80/script.php
 
@@ -23,11 +24,18 @@ docker run --link cve-mac0352 --rm ypereirareis/cve-2019-11043 http://cve-mac035
 docker run --rm -ti reproduce-cve-2019-11043 bash
 
 (parar o container do nginx antes executar o comando abaixo)
-docker run --rm --name cve-mac0352 -ti -p 1213:80 reproduce-cve-2019-11043 bash
+docker run --rm --name cve-mac0352 -ti -p 8080:80 reproduce-cve-2019-11043 bash
 
 cd php-src
 vim sapi/fpm/fpm/fpm_main.c
- 1208gg
+ 1208gg (path_info = blabla)
+
+vim main/fastcgi.c
+ 190gg (_fcgi_data_seg)
+
+vim main/fastcgi.h
+ 38gg (FCGI_HASH_FUNC)
+
 
 git diff ab061f95ca966731b1c84cf5b7b20155c0a1c06a
 
@@ -38,5 +46,5 @@ make -j4 && make install
 ------------------------------------------------------------
 
 Acessar: 
-http://localhost:1213/script.php
-http://localhost:1213/script.php?a=ls (depois do exploit)
+http://localhost:8080/script.php
+http://localhost:8080/script.php?a=ls (depois do exploit)
